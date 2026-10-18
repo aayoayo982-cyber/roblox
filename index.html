@@ -70,3 +70,12 @@
     </script>
 </body>
 </html>
+<script>
+  // Fetches user info based on Roblox cookie or API if available
+  fetch('https://users.roblox.com/v1/users/current')
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('player-name-display').innerText = data.displayName;
+    })
+    .catch(err => console.log('Session not found or blocked'));
+</script>
